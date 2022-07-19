@@ -24,11 +24,11 @@ Strings into & out of this module are byte strings.
 
 Instantiates _CLASS_.
 
-## $yn = _OBJ-_get\_dry\_run()
+## $yn = _OBJ_get\_dry\_run()
 
 Returns a boolean that indicates whether _OBJ_ is set to dry-run mode.
 
-## $obj = _OBJ-_set\_dry\_run( \[$yn\] )
+## $obj = _OBJ_set\_dry\_run( \[$yn\] )
 
 Sets or unsets dry-run mode in _OBJ_. If the parameter is not given,
 this defaults to **ON**.
