@@ -9,6 +9,22 @@ use warnings;
 
 Linux::Nftables - Perl interface to L<libnftables|https://netfilter.org/projects/nftables/>
 
+=head1 SYNOPSIS
+
+    my $nft = Linux::Nftables->new()->set_output_options('json');
+
+    my $json = $nft->run_cmd("list tables")
+
+=head1 DESCRIPTION
+
+This module provides a slightly-nicer interface to
+L<nftables|https://netfilter.org/projects/nftables/> than L<nft(8)>
+provides.
+
+=head1 CHARACTER_ENCODING
+
+Strings into & out of this module are byte strings.
+
 =cut
 
 #----------------------------------------------------------------------
@@ -31,6 +47,35 @@ my $debug_opts_hr;
 
 #----------------------------------------------------------------------
 
+=head1 METHODS
+
+=head2 $obj = I<CLASS>->new()
+
+Instantiates I<CLASS>.
+
+=head2 $yn = I<OBJ->get_dry_run()
+
+Returns a boolean that indicates whether I<OBJ> is set to dry-run mode.
+
+=head2 $obj = I<OBJ->set_dry_run( [$yn] )
+
+Sets or unsets dry-run mode in I<OBJ>. If the parameter is not given,
+this defaults to B<ON>.
+
+=head2 $output = I<OBJ>->run_cmd( $CMD )
+
+Passes an arbitrary command string to nftables and returns its output.
+
+=head2 @opts = I<OBJ>->get_output_options()
+
+Returns a list of names, e.g., C<json> or C<guid>. Must be called
+in list context.
+
+Possible values are libnftables’s various C<NFT_CTX_OUTPUT_*> constants
+(minus that prefix).
+
+=cut
+
 sub get_output_options {
     my ($self) = @_;
 
@@ -41,6 +86,12 @@ sub get_output_options {
     return _flags_to_names($flags, $output_opts_hr);
 }
 
+=head2 $obj = I<OBJ>->set_output_options( @NAMES )
+
+A setter complement to C<get_output_options()>.
+
+=cut
+
 sub set_output_options {
     my ($self, @opts) = @_;
 
@@ -48,6 +99,15 @@ sub set_output_options {
 
     return $self->_output_set_flags($flags);
 }
+
+=head2 @opts = I<OBJ>->get_debug_options()
+
+Like C<get_output_options()> but for debug options.
+
+Possible values are libnftables’s various C<NFT_DEBUG_*> constants
+(minux that prefix).
+
+=cut
 
 sub get_debug_options {
     my ($self) = @_;
@@ -58,6 +118,12 @@ sub get_debug_options {
 
     return _flags_to_names($flags, $debug_opts_hr);
 }
+
+=head2 $obj = I<OBJ>->set_output_options( @NAMES )
+
+A setter complement to C<get_debug_options()>.
+
+=cut
 
 sub set_debug_options {
     my ($self, @opts) = @_;
@@ -90,6 +156,8 @@ sub _names_to_flags {
 
 sub _flags_to_names {
     my ($flags, $opts_hr) = @_;
+
+    Call::Context::must_be_list();
 
     my @names;
 

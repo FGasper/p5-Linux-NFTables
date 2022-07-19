@@ -1,0 +1,17 @@
+MANIFEST
+Makefile.PL
+Nftables.xs
+README.md
+cpanfile
+easyxs/LICENSE
+easyxs/README.md
+easyxs/easyxs.h
+easyxs/easyxs_debug.h
+easyxs/easyxs_numeric.h
+easyxs/easyxs_perlcall.h
+easyxs/easyxs_scalar.h
+easyxs/easyxs_string.h
+easyxs/easyxs_structref.h
+easyxs/init.h
+easyxs/ppport.h
+lib/Linux/Nftables.pm
