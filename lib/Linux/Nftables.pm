@@ -13,7 +13,7 @@ Linux::Nftables - Perl interface to L<libnftables|https://netfilter.org/projects
 
     my $nft = Linux::Nftables->new()->set_output_options('json');
 
-    my $json = $nft->run_cmd("list tables")
+    my $json = $nft->run_cmd("list tables");
 
 =head1 DESCRIPTION
 
