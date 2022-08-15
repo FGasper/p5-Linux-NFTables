@@ -53,11 +53,11 @@ my $debug_opts_hr;
 
 Instantiates I<CLASS>.
 
-=head2 $yn = I<OBJ>get_dry_run()
+=head2 $yn = I<OBJ>->get_dry_run()
 
 Returns a boolean that indicates whether I<OBJ> is set to dry-run mode.
 
-=head2 $obj = I<OBJ>set_dry_run( [$yn] )
+=head2 $obj = I<OBJ>->set_dry_run( [$yn] )
 
 Sets or unsets dry-run mode in I<OBJ>. If the parameter is not given,
 this defaults to B<ON>.
