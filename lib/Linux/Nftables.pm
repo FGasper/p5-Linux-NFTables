@@ -119,7 +119,7 @@ sub get_debug_options {
     return _flags_to_names($flags, $debug_opts_hr);
 }
 
-=head2 $obj = I<OBJ>->set_output_options( @NAMES )
+=head2 $obj = I<OBJ>->set_debug_options( @NAMES )
 
 A setter complement to C<get_debug_options()>.
 

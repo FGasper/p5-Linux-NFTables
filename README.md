@@ -56,6 +56,6 @@ Like `get_output_options()` but for debug options.
 Possible values are libnftables’s various `NFT_DEBUG_*` constants
 (minux that prefix).
 
-## $obj = _OBJ_->set\_output\_options( @NAMES )
+## $obj = _OBJ_->set\_debug\_options( @NAMES )
 
 A setter complement to `get_debug_options()`.
