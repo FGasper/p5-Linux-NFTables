@@ -1,0 +1,87 @@
+on:
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+  pull_request:
+
+env:
+   PERL_USE_UNSAFE_INC: 0
+   AUTHOR_TESTING: 1
+   AUTOMATED_TESTING: 1
+   RELEASE_TESTING: 1
+   PERL_CARTON_PATH: $GITHUB_WORKSPACE/local
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+
+    name: Ubuntu (Perl ${{matrix.perl-version}})
+
+    defaults:
+      run:
+        shell: bash
+
+    strategy:
+      fail-fast: false
+      matrix:
+        perl-version:
+          - '5.36'
+          - '5.34'
+          - '5.32'
+          - '5.30'
+          - '5.28'
+          - '5.26'
+          - '5.24'
+          - '5.22'
+          - '5.20'
+          - '5.18'
+          - '5.16'
+          - '5.14'
+          - '5.12'
+          - '5.10'
+
+    container:
+      image: perldocker/perl-tester:${{ matrix.perl-version }}
+
+    steps:
+      - uses: actions/checkout@main
+        with:
+            submodules: recursive
+      - run: perl -V
+      - name: Install OS packages
+        run: apt update -y && apt install libnftables-dev
+      - name: Install CPAN dependencies
+        run: cpanm --notest --installdeps --with-configure --with-develop .
+      - name: perl Makefile.PL
+        run: perl Makefile.PL
+      - name: make
+        run: make
+      - name: Run Tests
+        run: prove -wlvmb t
+
+  qemu:
+    runs-on: ubuntu-latest
+
+    name: Alpine Linux ${{ matrix.platform }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - arm64v8
+          - arm64v7
+          - arm32v6
+          - i386
+          - s390x
+
+    steps:
+      - uses: actions/checkout@main
+        with:
+            submodules: recursive
+      - name: Get the qemu container
+        run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+      - name: Run tests on ${{ matrix.platform.container }}
+        run: docker run --rm --interactive --mount type=bind,source=$(pwd),target=/host ${{ matrix.platform.container }} sh -c "apk add wget perl-app-cpanminus perl-dev make gcc libc-dev nftables-dev; cd /host; perl -V; cpanm --verbose --notest --installdeps --with-configure --with-develop .; perl Makefile.PL; make -j3 -j3; PERL_DL_NONLAZY=1 prove -wlvmb t"
+
