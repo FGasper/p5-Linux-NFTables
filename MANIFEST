@@ -16,3 +16,4 @@ easyxs/easyxs_structref.h
 easyxs/init.h
 easyxs/ppport.h
 lib/Linux/NFTables.pm
+t/basic.t
