@@ -71,7 +71,7 @@ jobs:
       matrix:
         platform:
           - arm64v8
-          - arm64v7
+          - arm32v7
           - arm32v6
           - i386
           - s390x
@@ -83,5 +83,5 @@ jobs:
       - name: Get the qemu container
         run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
       - name: Run tests on ${{ matrix.platform.container }}
-        run: docker run --rm --interactive --mount type=bind,source=$(pwd),target=/host ${{ matrix.platform }}/alpine sh -c "apk add wget perl-app-cpanminus perl-dev make gcc libc-dev nftables-dev; cd /host; perl -V; cpanm --verbose --notest --installdeps --with-configure --with-develop .; perl Makefile.PL; make -j3 -j3; PERL_DL_NONLAZY=1 prove -wlvmb t"
+        run: sudo docker run --rm --interactive --cap-add NET_ADMIN --mount type=bind,source=$(pwd),target=/host ${{ matrix.platform }}/alpine sh -c "apk add wget perl-app-cpanminus perl-dev make gcc libc-dev nftables-dev; cd /host; perl -V; cpanm --verbose --notest --installdeps --with-configure --with-develop .; perl Makefile.PL; make -j3 -j3; PERL_DL_NONLAZY=1 prove -wlvmb t"
 
