@@ -1,4 +1,4 @@
-package Linux::Nftables;
+package Linux::NFTables;
 
 use strict;
 use warnings;
@@ -7,11 +7,11 @@ use warnings;
 
 =head1 NAME
 
-Linux::Nftables - Perl interface to L<libnftables|https://netfilter.org/projects/nftables/>
+Linux::NFTables - Perl interface to L<libnftables|https://netfilter.org/projects/nftables/>
 
 =head1 SYNOPSIS
 
-    my $nft = Linux::Nftables->new()->set_output_options('json');
+    my $nft = Linux::NFTables->new()->set_output_options('json');
 
     my $json = $nft->run_cmd("list tables");
 

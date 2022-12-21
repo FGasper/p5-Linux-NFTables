@@ -12,11 +12,11 @@ if (!$libs) {
 }
 
 WriteMakefile(
-    NAME              => 'Linux::Nftables',
-    VERSION_FROM      => 'lib/Linux/Nftables.pm', # finds $VERSION
-    ABSTRACT_FROM  => 'lib/Linux/Nftables.pm', # retrieve abstract from module
+    NAME              => 'Linux::NFTables',
+    VERSION_FROM      => 'lib/Linux/NFTables.pm', # finds $VERSION
+    ABSTRACT_FROM  => 'lib/Linux/NFTables.pm', # retrieve abstract from module
     AUTHOR         => [
-        'cPanel, L.L.C. (CPANEL)',
+        'Felipe Gasper (FELIPE)',
     ],
 
     LICENSE => "perl_5",
@@ -37,11 +37,11 @@ WriteMakefile(
         resources => {
             repository => {
                 type => 'git',
-                #url => 'git://github.com/FGasper/p5-Linux-Nftables.git',
-                #web => 'https://github.com/FGasper/p5-Linux-Nftables',
+                url => 'git://github.com/FGasper/p5-Linux-NFTables.git',
+                web => 'https://github.com/FGasper/p5-Linux-NFTables',
             },
             bugtracker => {
-                #web => 'https://github.com/FGasper/p5-Linux-Nftables/issues',
+                web => 'https://github.com/FGasper/p5-Linux-NFTables/issues',
             },
         },
     },

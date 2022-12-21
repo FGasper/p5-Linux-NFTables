@@ -1,6 +1,6 @@
 MANIFEST
 Makefile.PL
-Nftables.xs
+NFTables.xs
 README.md
 cpanfile
 easyxs/LICENSE
@@ -14,4 +14,4 @@ easyxs/easyxs_string.h
 easyxs/easyxs_structref.h
 easyxs/init.h
 easyxs/ppport.h
-lib/Linux/Nftables.pm
+lib/Linux/NFTables.pm

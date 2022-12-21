@@ -1,7 +1,7 @@
 #include "easyxs/easyxs.h"
 #include <nftables/libnftables.h>
 
-#define PERL_NS "Linux::Nftables"
+#define PERL_NS "Linux::NFTables"
 
 typedef struct {
     struct nft_ctx* nft;
@@ -13,7 +13,7 @@ typedef struct {
 
 // ----------------------------------------------------------------------
 
-MODULE = Linux::Nftables        PACKAGE = Linux::Nftables
+MODULE = Linux::NFTables        PACKAGE = Linux::NFTables
 
 PROTOTYPES: DISABLE
 
