@@ -51,7 +51,7 @@ jobs:
             submodules: recursive
       - run: perl -V
       - name: Install OS packages
-        run: apt update -y && apt install libnftables-dev
+        run: apt update -y && apt install -y libnftables-dev
       - name: Install CPAN dependencies
         run: cpanm --notest --installdeps --with-configure --with-develop .
       - name: perl Makefile.PL
@@ -61,10 +61,10 @@ jobs:
       - name: Run Tests
         run: prove -wlvmb t
 
-  qemu:
+  qemu-alpine:
     runs-on: ubuntu-latest
 
-    name: Alpine Linux ${{ matrix.platform }}
+    name: Alpine Linux (${{ matrix.platform }})
 
     strategy:
       fail-fast: false
@@ -83,5 +83,5 @@ jobs:
       - name: Get the qemu container
         run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
       - name: Run tests on ${{ matrix.platform.container }}
-        run: docker run --rm --interactive --mount type=bind,source=$(pwd),target=/host ${{ matrix.platform.container }} sh -c "apk add wget perl-app-cpanminus perl-dev make gcc libc-dev nftables-dev; cd /host; perl -V; cpanm --verbose --notest --installdeps --with-configure --with-develop .; perl Makefile.PL; make -j3 -j3; PERL_DL_NONLAZY=1 prove -wlvmb t"
+        run: docker run --rm --interactive --mount type=bind,source=$(pwd),target=/host ${{ matrix.platform }}/alpine sh -c "apk add wget perl-app-cpanminus perl-dev make gcc libc-dev nftables-dev; cd /host; perl -V; cpanm --verbose --notest --installdeps --with-configure --with-develop .; perl Makefile.PL; make -j3 -j3; PERL_DL_NONLAZY=1 prove -wlvmb t"
 
