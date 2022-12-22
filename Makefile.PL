@@ -30,7 +30,7 @@ my @checks = (
         $define =~ tr<a-z><A-Z>;
 
         {
-            label => $func,
+            label => $identifier,
             c => [
                 '#include <nftables/libnftables.h>',
                 'int main() {',
@@ -61,7 +61,7 @@ my @defines;
             print {$wfh} "$_$/" for @{ $check->{'c'} };
         }
 
-        my $cmd = "$ccpath $Config{'ccflags'} $cflags $cpath -o $progpath $Config{ccdlflags} $pc_ldflags";
+        my $cmd = "$ccpath $Config{'ccflags'} $cflags $cpath -o $progpath $Config{ccdlflags} $libs";
         system($cmd);
 
         print "$check->{'define'}: ";
