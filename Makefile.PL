@@ -22,12 +22,6 @@ if ($version =~ m<\A0>) {
 my $libs = ExtUtils::PkgConfig->libs($PC_MODULE);
 my $cflags = ExtUtils::PkgConfig->cflags($PC_MODULE) || q<>;
 
-# Sometimes the linker fails to load libnftnl at runtime,
-# so let’s save a hint.
-#
-my @libdirs = split m<\s+>, ExtUtils::PkgConfig->libs_only_L($PC_MODULE);
-s<\A-L><> for @libdirs;
-
 #----------------------------------------------------------------------
 my @checks = (
     ( map {
@@ -107,11 +101,7 @@ WriteMakefile(
         map { "-D$_" } @defines,
     ),
 
-    LIBS => join(
-        q< >,
-        $libs,
-        ( map { "-Wl,-rpath=$_" } @libdirs ),
-    ),
+    LIBS => $libs,
 
     PMLIBDIRS => ['lib'],
 
