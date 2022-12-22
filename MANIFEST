@@ -1,9 +1,13 @@
+.github/workflows/all.yml
+.gitignore
+.gitmodules
 LICENSE
 MANIFEST
 Makefile.PL
 NFTables.xs
 README.md
 cpanfile
+easyxs/.gitignore
 easyxs/LICENSE
 easyxs/README.md
 easyxs/easyxs.h
