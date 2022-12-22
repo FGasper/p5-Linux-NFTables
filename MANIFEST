@@ -1,6 +1,7 @@
 .github/workflows/all.yml
 .gitignore
 .gitmodules
+Changes
 LICENSE
 MANIFEST
 Makefile.PL

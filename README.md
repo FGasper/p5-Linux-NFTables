@@ -10,10 +10,8 @@ Linux::NFTables - Perl interface to [libnftables](https://netfilter.org/projects
 
 # DESCRIPTION
 
-This module provides an interface to
-[nftables](https://netfilter.org/projects/nftables/). While you could use
-[nft(8)](http://man.he.net/man8/nft) instead, that runs in a separate process and so entails a bit
-more overhead.
+This module provides a Perl interface to
+[nftables](https://netfilter.org/projects/nftables/).
 
 # CHARACTER\_ENCODING
 

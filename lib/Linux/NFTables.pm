@@ -35,7 +35,7 @@ use Symbol::Get ();
 
 use XSLoader;
 
-our $VERSION = '0.01_01';
+our $VERSION = '0.01';
 XSLoader::load( __PACKAGE__, $VERSION );
 
 my $OUTPUT_OPT_PREFIX = '_NFT_CTX_OUTPUT_';
