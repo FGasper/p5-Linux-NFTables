@@ -70,22 +70,21 @@ jobs:
       - name: make
         run: make
       - name: Run Tests
-        run: prove -wlvmb t
+        run: sudo prove -wlvmb t
 
-  qemu-alpine:
+  qemu:
     runs-on: ubuntu-latest
 
-    name: Alpine Linux (${{ matrix.platform }})
+    name: QEMU (${{ matrix.env.container }})
 
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - arm64v8
-          - arm32v7
-          - amd64
-          - i386
-          - s390x
+        env:
+          - container: i386/alpine
+            setup: apk add perl-app-cpanminus perl-dev make gcc libc-dev nftables-dev
+          - container: amd64/ubuntu
+            setup: apt update && apt install -y cpanminus make gcc pkg-config libnftables-dev
 
     steps:
       - uses: actions/checkout@main
@@ -94,6 +93,5 @@ jobs:
       - name: Get the qemu container
         run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
       - name: Run tests
-        #run: sudo docker run --rm --interactive --cap-add NET_ADMIN --mount type=bind,source=$(pwd),target=/host ${{ matrix.platform }}/alpine sh -c "uname -a; apk add wget perl-app-cpanminus perl-dev make gcc libc-dev nftables-dev; cd /host; perl -V; cpanm --verbose --notest --installdeps --with-configure --with-develop .; perl Makefile.PL; make -j3 -j3; PERL_DL_NONLAZY=1 prove -wlvmb t"
-        run: sudo docker run --rm --interactive --cap-add NET_ADMIN --mount type=bind,source=$(pwd),target=/host ${{ matrix.platform }}/ubuntu sh -c "uname -a; apt update && apt install -y cpanminus make gcc pkg-config libnftables-dev; cd /host; perl -V; cpanm --verbose --notest --installdeps --with-configure --with-develop .; perl Makefile.PL; make -j3 -j3; PERL_DL_NONLAZY=1 prove -wlvmb t"
+        run: sudo docker run --rm --interactive --cap-add NET_ADMIN --mount type=bind,source=$(pwd),target=/host ${{ matrix.env.container }} sh -c "uname -a; ${{ matrix.env.setup}}; cd /host; perl -V; cpanm --verbose --notest --installdeps --with-configure --with-develop .; perl Makefile.PL; make -j3 -j3; PERL_DL_NONLAZY=1 prove -wlvmb t"
 
