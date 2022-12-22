@@ -110,7 +110,7 @@ WriteMakefile(
     LIBS => join(
         q< >,
         $libs,
-        ( map { "-Wl,-rpath-link=$_" } @libdirs ),
+        ( map { "-Wl,-rpath=$_" } @libdirs ),
     ),
 
     PMLIBDIRS => ['lib'],
