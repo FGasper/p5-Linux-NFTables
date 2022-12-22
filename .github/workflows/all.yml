@@ -83,17 +83,17 @@ jobs:
       - uses: actions/checkout@main
         with:
             submodules: recursive
-      - run: apt update && apt install -y cpanminus make gcc pkg-config libnftnl-dev bison flex asciidoc libmnl-dev libjansson-dev
+      - run: sudo apt update && sudo apt install -y cpanminus make gcc pkg-config libnftnl-dev bison flex asciidoc libmnl-dev libjansson-dev
       - name: Clone nftables
-        run: docker exec perltester git clone git://git.netfilter.org/nftables
+        run: git clone git://git.netfilter.org/nftables
       - name: Check out nftables branch
         if: ${{ matrix.branch }}
         run: cd nftables && git checkout ${{ matrix.branch }}
       - name: Build & install nftables
-        run: docker exec perltester sh -c 'cd nftables && ./autogen.sh && ./configure --with-json --without-cli && make install'
+        run: cd nftables && ./autogen.sh && ./configure --with-json --without-cli && make install
       - run: ldconfig
       - name: Install CPAN dependencies
-        run: cpanm --notest --installdeps --with-configure --with-develop .
+        run: cpanm --sudo --notest --installdeps --with-configure --with-develop .
       - name: perl Makefile.PL
         run: perl Makefile.PL
       - name: make
