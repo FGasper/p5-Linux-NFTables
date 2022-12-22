@@ -44,33 +44,36 @@ jobs:
         nftables-version:
           - 1.0.6
 
-    container:
-      image: perldocker/perl-tester:${{ matrix.perl-version }}
+#    container:
+#      image: perldocker/perl-tester:${{ matrix.perl-version }}
 
     steps:
       - uses: actions/checkout@main
         with:
             submodules: recursive
-      - run: perl -V
+      - name: Run QEMU
+        run: docker run --rm --privileged multiarch/qemu-user-static --reset --persistent yes
+      - name: Start perl-tester container
+        run: sudo docker run --detach=true --name=perltester --rm --interactive --cap-add NET_ADMIN --mount type=bind,source=$(pwd),target=/host perldocker/perl-tester:${{ matrix.perl-version }}
       - name: Install OS packages to build nftables
-        run: apt update -y && apt install -y curl bison flex asciidoc libmnl-dev libedit-dev
+        run: docker exec perltester 'apt update -y && apt install -y curl bison flex asciidoc libmnl-dev libedit-dev'
       - name: Clone libnftnl
-        run: git clone git://git.netfilter.org/libnftnl
+        run: docker exec perltester git clone git://git.netfilter.org/libnftnl
       - name: Build & install libnftnl
-        run: cd libnftnl && ./autogen.sh && ./configure && make install
+        run: docker exec perltester 'cd libnftnl && ./autogen.sh && ./configure && make install'
       - name: Clone nftables
-        run: git clone git://git.netfilter.org/nftables
+        run: docker exec perltester git clone git://git.netfilter.org/nftables
       - name: Build & install nftables
-        run: cd nftables && ./autogen.sh && ./configure && make install
-      - run: ldconfig
+        run: docker exec perltester 'cd nftables && ./autogen.sh && ./configure && make install'
+      - run: docker exec perltester ldconfig
       - name: Install CPAN dependencies
-        run: cpanm --notest --installdeps --with-configure --with-develop .
+        run: docker exec perltester cpanm --notest --installdeps --with-configure --with-develop .
       - name: perl Makefile.PL
-        run: perl Makefile.PL
+        run: docker exec perltester perl Makefile.PL
       - name: make
-        run: make
+        run: docker exec perltester make
       - name: Run Tests
-        run: sudo prove -wlvmb t
+        run: docker exec perltester sudo prove -wlvmb t
 
   qemu:
     runs-on: ubuntu-latest
@@ -91,7 +94,7 @@ jobs:
         with:
             submodules: recursive
       - name: Get the qemu container
-        run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+        run: docker run --rm --privileged multiarch/qemu-user-static --reset --persistent yes
       - name: Run tests
         run: sudo docker run --rm --interactive --cap-add NET_ADMIN --mount type=bind,source=$(pwd),target=/host ${{ matrix.env.container }} sh -c "uname -a; ${{ matrix.env.setup}}; cd /host; perl -V; cpanm --verbose --notest --installdeps --with-configure --with-develop .; perl Makefile.PL; make -j3 -j3; PERL_DL_NONLAZY=1 prove -wlvmb t"
 
