@@ -56,15 +56,15 @@ jobs:
       - name: Start perl-tester container
         run: sudo docker run --detach=true --name=perltester --rm --interactive --cap-add NET_ADMIN --mount type=bind,source=$(pwd),target=/host perldocker/perl-tester:${{ matrix.perl-version }}
       - name: Install OS packages to build nftables
-        run: docker exec perltester 'apt update -y && apt install -y curl bison flex asciidoc libmnl-dev libedit-dev'
+        run: docker exec perltester sh -c 'apt update -y && apt install -y curl bison flex asciidoc libmnl-dev libedit-dev'
       - name: Clone libnftnl
         run: docker exec perltester git clone git://git.netfilter.org/libnftnl
       - name: Build & install libnftnl
-        run: docker exec perltester 'cd libnftnl && ./autogen.sh && ./configure && make install'
+        run: docker exec perltester sh -c 'cd libnftnl && ./autogen.sh && ./configure && make install'
       - name: Clone nftables
         run: docker exec perltester git clone git://git.netfilter.org/nftables
       - name: Build & install nftables
-        run: docker exec perltester 'cd nftables && ./autogen.sh && ./configure && make install'
+        run: docker exec perltester sh -c 'cd nftables && ./autogen.sh && ./configure && make install'
       - run: docker exec perltester ldconfig
       - name: Install CPAN dependencies
         run: docker exec perltester cpanm --notest --installdeps --with-configure --with-develop .
