@@ -76,7 +76,6 @@ jobs:
       fail-fast: false
       matrix:
         branch:
-          - ~
           - v1.0.0
 
     steps:
@@ -90,7 +89,7 @@ jobs:
         if: ${{ matrix.branch }}
         run: cd nftables && git checkout ${{ matrix.branch }}
       - name: Build & install nftables
-        run: cd nftables && ./autogen.sh && ./configure --with-json --without-cli && make install
+        run: cd nftables && ./autogen.sh && ./configure --with-json --without-cli && make && sudo make install
       - run: ldconfig
       - name: Install CPAN dependencies
         run: cpanm --sudo --notest --installdeps --with-configure --with-develop .
