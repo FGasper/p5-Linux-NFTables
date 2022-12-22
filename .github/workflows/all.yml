@@ -90,7 +90,7 @@ jobs:
         run: cd nftables && git checkout ${{ matrix.branch }}
       - name: Build & install nftables
         run: cd nftables && ./autogen.sh && ./configure --with-json --without-cli && make && sudo make install
-      - run: ldconfig
+      - run: sudo ldconfig
       - name: Install CPAN dependencies
         run: cpanm --sudo --notest --installdeps --with-configure --with-develop .
       - name: perl Makefile.PL
