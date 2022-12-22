@@ -17,9 +17,10 @@ Linux::NFTables - Perl interface to L<libnftables|https://netfilter.org/projects
 
 =head1 DESCRIPTION
 
-This module provides a slightly-nicer interface to
-L<nftables|https://netfilter.org/projects/nftables/> than L<nft(8)>
-provides.
+This module provides an interface to
+L<nftables|https://netfilter.org/projects/nftables/>. While you could use
+L<nft(8)> instead, that runs in a separate process and so entails a bit
+more overhead.
 
 =head1 CHARACTER_ENCODING
 

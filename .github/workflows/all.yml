@@ -14,14 +14,10 @@ env:
    PERL_CARTON_PATH: $GITHUB_WORKSPACE/local
 
 jobs:
-  ubuntu:
+  ubuntu-perl:
     runs-on: ubuntu-latest
 
     name: Ubuntu (Perl ${{matrix.perl-version}})
-
-    defaults:
-      run:
-        shell: bash
 
     strategy:
       fail-fast: false
@@ -71,6 +67,40 @@ jobs:
       - name: Run Tests
         run: docker exec perltester prove -wlvmb t
 
+  ubuntu:
+    runs-on: ubuntu-latest
+
+    name: Ubuntu (nftables: ${{ matrix.branch || 'upstream' }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        branch:
+          - ~
+          - v1.0.0
+
+    steps:
+      - uses: actions/checkout@main
+        with:
+            submodules: recursive
+      - run: apt update && apt install -y cpanminus make gcc pkg-config libnftnl-dev bison flex asciidoc libmnl-dev libjansson-dev
+      - name: Clone nftables
+        run: docker exec perltester git clone git://git.netfilter.org/nftables
+      - name: Check out nftables branch
+        if: ${{ matrix.branch }}
+        run: cd nftables && git checkout ${{ matrix.branch }}
+      - name: Build & install nftables
+        run: docker exec perltester sh -c 'cd nftables && ./autogen.sh && ./configure --with-json --without-cli && make install'
+      - run: ldconfig
+      - name: Install CPAN dependencies
+        run: cpanm --notest --installdeps --with-configure --with-develop .
+      - name: perl Makefile.PL
+        run: perl Makefile.PL
+      - name: make
+        run: make
+      - name: Run Tests
+        run: prove -wlvmb t
+
   qemu:
     runs-on: ubuntu-latest
 
@@ -82,8 +112,6 @@ jobs:
         env:
           - container: i386/alpine
             setup: apk add perl-app-cpanminus perl-dev make gcc libc-dev nftables-dev
-          - container: amd64/ubuntu
-            setup: apt update && apt install -y cpanminus make gcc pkg-config libnftables-dev
 
     steps:
       - uses: actions/checkout@main
