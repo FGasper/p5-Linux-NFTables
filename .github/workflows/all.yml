@@ -98,7 +98,7 @@ jobs:
       - name: make
         run: make
       - name: Run Tests
-        run: prove -wlvmb t
+        run: sudo prove -wlvmb t
 
   qemu:
     runs-on: ubuntu-latest
