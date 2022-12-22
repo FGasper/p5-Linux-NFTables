@@ -1,4 +1,5 @@
 requires 'Symbol::Get';
+requires 'Call::Context';
 
 on configure => sub {
     requires 'ExtUtils::MakeMaker::CPANfile';

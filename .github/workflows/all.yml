@@ -41,6 +41,8 @@ jobs:
           - '5.14'
           - '5.12'
           - '5.10'
+        nftables-version:
+          - 1.0.6
 
     container:
       image: perldocker/perl-tester:${{ matrix.perl-version }}
@@ -50,8 +52,16 @@ jobs:
         with:
             submodules: recursive
       - run: perl -V
-      - name: Install OS packages
-        run: apt update -y && apt install -y libnftables-dev
+      - name: Install OS packages to build nftables
+        run: apt update -y && apt install -y curl bison flex asciidoc libmnl-dev libedit-dev
+      - name: Clone libnftnl
+        run: git clone git://git.netfilter.org/libnftnl
+      - name: Build & install libnftnl
+        run: cd libnftnl && ./autogen.sh && ./configure && make install
+      - name: Clone nftables
+        run: git clone git://git.netfilter.org/nftables
+      - name: Build & install nftables
+        run: cd nftables && ./autogen.sh && ./configure && make install
       - name: Install CPAN dependencies
         run: cpanm --notest --installdeps --with-configure --with-develop .
       - name: perl Makefile.PL
