@@ -83,7 +83,7 @@ jobs:
         platform:
           - arm64v8
           - arm32v7
-          - arm32v6
+          - amd64
           - i386
           - s390x
 
@@ -93,6 +93,7 @@ jobs:
             submodules: recursive
       - name: Get the qemu container
         run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-      - name: Run tests on ${{ matrix.platform.container }}
-        run: sudo docker run --rm --interactive --cap-add NET_ADMIN --mount type=bind,source=$(pwd),target=/host ${{ matrix.platform }}/alpine sh -c "uname -a; apk add wget perl-app-cpanminus perl-dev make gcc libc-dev nftables-dev; cd /host; perl -V; cpanm --verbose --notest --installdeps --with-configure --with-develop .; perl Makefile.PL; make -j3 -j3; PERL_DL_NONLAZY=1 prove -wlvmb t"
+      - name: Run tests
+        #run: sudo docker run --rm --interactive --cap-add NET_ADMIN --mount type=bind,source=$(pwd),target=/host ${{ matrix.platform }}/alpine sh -c "uname -a; apk add wget perl-app-cpanminus perl-dev make gcc libc-dev nftables-dev; cd /host; perl -V; cpanm --verbose --notest --installdeps --with-configure --with-develop .; perl Makefile.PL; make -j3 -j3; PERL_DL_NONLAZY=1 prove -wlvmb t"
+        run: sudo docker run --rm --interactive --cap-add NET_ADMIN --mount type=bind,source=$(pwd),target=/host ${{ matrix.platform }}/ubuntu sh -c "uname -a; apt update && apt install -y cpanminus make gcc libnftables-dev; cd /host; perl -V; cpanm --verbose --notest --installdeps --with-configure --with-develop .; perl Makefile.PL; make -j3 -j3; PERL_DL_NONLAZY=1 prove -wlvmb t"
 
