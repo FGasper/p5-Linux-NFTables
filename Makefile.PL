@@ -5,6 +5,7 @@ use Config;
 
 use ExtUtils::MakeMaker::CPANfile;
 use ExtUtils::PkgConfig;
+use File::Temp;
 
 my $PC_MODULE = 'libnftables';
 
