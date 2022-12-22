@@ -62,6 +62,7 @@ jobs:
         run: git clone git://git.netfilter.org/nftables
       - name: Build & install nftables
         run: cd nftables && ./autogen.sh && ./configure && make install
+      - run: ldconfig
       - name: Install CPAN dependencies
         run: cpanm --notest --installdeps --with-configure --with-develop .
       - name: perl Makefile.PL
