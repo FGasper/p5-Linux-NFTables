@@ -46,8 +46,9 @@ jobs:
       - uses: actions/checkout@main
         with:
             submodules: recursive
-      - name: Run QEMU
-        run: docker run --rm --privileged multiarch/qemu-user-static --reset --persistent yes
+
+      # As of now GitHub’s container lacks the NET_ADMIN capability,
+      # so we run everything here inside a sub-container.
       - name: Start perl-tester container
         run: sudo docker run --detach=true --name=perltester --rm --interactive --cap-add NET_ADMIN --mount type=bind,source=$(pwd),target=/host --workdir /host perldocker/perl-tester:${{ matrix.perl-version }}
       - name: Install OS packages to build nftables
