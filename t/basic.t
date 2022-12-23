@@ -14,7 +14,9 @@ use Linux::NFTables;
 my $nft = Linux::NFTables->new();
 isa_ok( $nft, 'Linux::NFTables', 'new() return' );
 
-if (0 == $>) {
+SKIP: {
+    skip 'Must be root to test commands', 1 if $>;
+
     my $out = $nft->run_cmd('list tables');
     unlike($out, qr<\[>, '`list tables` - default setup');
 }
@@ -22,8 +24,10 @@ if (0 == $>) {
 my $nft2 = $nft->set_output_options('json');
 is($nft2, $nft, 'set_output_options() returns the same reference');
 
-if (0 == $>) {
-    $out = $nft->run_cmd('list tables');
+SKIP: {
+    skip 'Must be root to test commands', 1 if $>;
+
+    my $out = $nft->run_cmd('list tables');
     my $parsed = JSON::PP::decode_json($out);
 
     cmp_deeply(
