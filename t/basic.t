@@ -14,21 +14,25 @@ use Linux::NFTables;
 my $nft = Linux::NFTables->new();
 isa_ok( $nft, 'Linux::NFTables', 'new() return' );
 
-my $out = $nft->run_cmd('list tables');
-unlike($out, qr<\[>, '`list tables` - default setup');
+if (0 == $>) {
+    my $out = $nft->run_cmd('list tables');
+    unlike($out, qr<\[>, '`list tables` - default setup');
+}
 
 my $nft2 = $nft->set_output_options('json');
 is($nft2, $nft, 'set_output_options() returns the same reference');
 
-$out = $nft->run_cmd('list tables');
-my $parsed = JSON::PP::decode_json($out);
+if (0 == $>) {
+    $out = $nft->run_cmd('list tables');
+    my $parsed = JSON::PP::decode_json($out);
 
-cmp_deeply(
-    $parsed,
-    {
-        nftables => superbagof(),
-    },
-    'JSON return parses',
-);
+    cmp_deeply(
+        $parsed,
+        {
+            nftables => superbagof(),
+        },
+        'JSON return parses',
+    );
+}
 
 done_testing;

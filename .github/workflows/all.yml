@@ -97,7 +97,9 @@ jobs:
         run: perl Makefile.PL
       - name: make
         run: make
-      - name: Run Tests
+      - name: Run Tests as user
+        run: prove -wlvmb t
+      - name: Run Tests as root
         run: sudo prove -wlvmb t
 
   qemu:
